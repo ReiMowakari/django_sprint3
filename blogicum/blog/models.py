@@ -37,7 +37,6 @@ class Category(BaseModel):
         )
     )
 
-
     class Meta:
         verbose_name = 'категория'
         verbose_name_plural = 'Категории'
