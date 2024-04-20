@@ -31,9 +31,12 @@ class Category(BaseModel):
     slug = models.SlugField(
         unique=True,
         verbose_name='Идентификатор',
-        help_text='''Идентификатор страницы для URL;
-        разрешены символы латиницы, цифры, дефис и подчёркивание.'''
+        help_text=(
+            'Идентификатор страницы для URL;'
+            ' разрешены символы латиницы, цифры, дефис и подчёркивание.'
+        )
     )
+
 
     class Meta:
         verbose_name = 'категория'
@@ -67,8 +70,10 @@ class Post(BaseModel):
     text = models.TextField(verbose_name='Текст')
     pub_date = models.DateTimeField(
         verbose_name='Дата и время публикации',
-        help_text='''Если установить дату и время в будущем
-        — можно делать отложенные публикации.'''
+        help_text=(
+            'Если установить дату и время в будущем'
+            ' — можно делать отложенные публикации.'
+        )
     )
 
     author = models.ForeignKey(
