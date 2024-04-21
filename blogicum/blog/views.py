@@ -1,23 +1,38 @@
 from datetime import datetime
+
 from django.shortcuts import render, get_object_or_404
+
 from .models import Post, Category
 
-# Текущая дата и время.
-now = datetime.now()
+# Константа для отображения 5 записей на главной странице.
+POSTS_PER_PAGE = 5
+
+
+# Функция объединения моделей.
+def get_joined_models():
+    return Post.objects.select_related(
+        'location',
+        'author',
+        'category'
+    )
+
+
+# Функция фильтрации постов.
+def get_filtered_posts(posts, **kwargs):
+    return posts.filter(
+        pub_date__lte=datetime.now(),
+        is_published=True,
+        category__is_published=True,
+        **kwargs
+    )
 
 
 def index(request):
     """функция отображения главной страницы проекта."""
     template_name = 'blog/index.html'
-    post_list = Post.objects.select_related(
-        'location',
-        'author',
-        'category'
-    ).filter(
-        pub_date__lte=now,
-        is_published=True,
-        category__is_published=True,
-    ).order_by('-pub_date')[:5]
+    post_list = get_filtered_posts(get_joined_models()).order_by(
+        '-pub_date'
+        )[:POSTS_PER_PAGE]
     context = {
         'post_list': post_list,
     }
@@ -28,11 +43,7 @@ def post_detail(request, id):
     """функция отображения страницы с отдельной публикацией."""
     template_name = 'blog/detail.html'
     post = get_object_or_404(
-        Post.objects.filter(
-            pub_date__lte=now,
-            is_published=True,
-            category__is_published=True
-        ),
+        get_filtered_posts(get_joined_models()),
         pk=id,
     )
     context = {
@@ -51,10 +62,7 @@ def category_posts(request, category_slug):
         is_published=True
     )
     # Получение списка постов по отфильтрованной категории.
-    post_list = category.posts.filter(
-        pub_date__lte=now,
-        is_published=True,
-    )
+    post_list = get_filtered_posts(get_joined_models(), category_id=category)
     context = {
         'category': category,
         'post_list': post_list,
