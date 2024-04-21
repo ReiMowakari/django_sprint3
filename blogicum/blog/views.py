@@ -31,8 +31,7 @@ def index(request):
     """функция отображения главной страницы проекта."""
     template_name = 'blog/index.html'
     post_list = get_filtered_posts(get_joined_models()).order_by(
-        '-pub_date'
-        )[:POSTS_PER_PAGE]
+        '-pub_date')[:POSTS_PER_PAGE]
     context = {
         'post_list': post_list,
     }
