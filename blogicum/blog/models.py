@@ -1,12 +1,12 @@
 from django.db import models
 from django.contrib.auth import get_user_model
 
-# Получение модели User.
+
 User = get_user_model()
 
 
-# Абстрактная модель для исключения повторений.
 class BaseModel(models.Model):
+    '''Абстрактная модель для исключения повторений.'''
     is_published = models.BooleanField(
         default=True,
         verbose_name='Опубликовано',
@@ -21,8 +21,8 @@ class BaseModel(models.Model):
         abstract = True
 
 
-# Тематическая категория.
 class Category(BaseModel):
+    '''Тематическая категория.'''
     title = models.CharField(
         max_length=256,
         verbose_name='Заголовок'
@@ -45,8 +45,8 @@ class Category(BaseModel):
         return self.title
 
 
-# Географическая метка.
 class Location(BaseModel):
+    '''Географическая метка.'''
     name = models.CharField(
         max_length=256,
         verbose_name='Название места'
@@ -60,8 +60,8 @@ class Location(BaseModel):
         return self.name
 
 
-# Публикации.
 class Post(BaseModel):
+    '''Публикации.'''
     title = models.CharField(
         max_length=256,
         verbose_name='Заголовок',

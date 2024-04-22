@@ -1,6 +1,5 @@
-from datetime import datetime
-
 from django.shortcuts import render, get_object_or_404
+from django.utils import timezone
 
 from .models import Post, Category
 
@@ -20,7 +19,7 @@ def get_joined_models():
 # Функция фильтрации постов.
 def get_filtered_posts(posts, **kwargs):
     return posts.filter(
-        pub_date__lte=datetime.now(),
+        pub_date__lte=timezone.now(),
         is_published=True,
         category__is_published=True,
         **kwargs
@@ -30,10 +29,10 @@ def get_filtered_posts(posts, **kwargs):
 def index(request):
     """функция отображения главной страницы проекта."""
     template_name = 'blog/index.html'
-    post_list = get_filtered_posts(get_joined_models()).order_by(
+    posts = get_filtered_posts(get_joined_models()).order_by(
         '-pub_date')[:POSTS_PER_PAGE]
     context = {
-        'post_list': post_list,
+        'posts': posts,
     }
     return render(request, template_name, context)
 
@@ -61,9 +60,9 @@ def category_posts(request, category_slug):
         is_published=True
     )
     # Получение списка постов по отфильтрованной категории.
-    post_list = get_filtered_posts(get_joined_models(), category_id=category)
+    posts = get_filtered_posts(get_joined_models(), category_id=category)
     context = {
         'category': category,
-        'post_list': post_list,
+        'posts': posts,
     }
     return render(request, template_name, context)
