@@ -7,6 +7,7 @@ User = get_user_model()
 
 class BaseModel(models.Model):
     """Абстрактная модель для исключения повторений."""
+
     is_published = models.BooleanField(
         default=True,
         verbose_name='Опубликовано',
@@ -23,6 +24,7 @@ class BaseModel(models.Model):
 
 class Category(BaseModel):
     """Тематическая категория."""
+
     title = models.CharField(
         max_length=256,
         verbose_name='Заголовок'
@@ -47,6 +49,7 @@ class Category(BaseModel):
 
 class Location(BaseModel):
     """Географическая метка."""
+
     name = models.CharField(
         max_length=256,
         verbose_name='Название места'
@@ -62,6 +65,7 @@ class Location(BaseModel):
 
 class Post(BaseModel):
     """Публикации."""
+
     title = models.CharField(
         max_length=256,
         verbose_name='Заголовок',
